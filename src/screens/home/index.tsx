@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Text,
   View,
@@ -11,35 +12,42 @@ import { styles } from "./styles";
 import Participant from "../../components/Participant";
 
 export default function Home() {
-  const participants = [
-    "Victor Vilela Duarte",
-    "Jessica Aparecia Evangelista",
-    "Claudineia Vilela de Magalhães Duarte",
-    "Wagner de Paula Duarte",
-    "Melissa Vilela Duarte",
-    "Tommy Vilela Duarte",
-    "Maria Aparecida de Barros",
-    "Rosa de Paula Duarte",
-    "Saul Goodman",
-    "Cássio Ramos",
-    "Roger Guedes",
-  ];
+  const [participants, setParticipants] = useState<string[]>([]);
+  const [participantName, setParticipantName] = useState("");
+  // const participants = [
+  //   "Victor Vilela Duarte",
+  //   "Jessica Aparecia Evangelista",
+  //   "Claudineia Vilela de Magalhães Duarte",
+  //   "Wagner de Paula Duarte",
+  //   "Melissa Vilela Duarte",
+  //   "Tommy Vilela Duarte",
+  //   "Maria Aparecida de Barros",
+  //   "Rosa de Paula Duarte",
+  //   "Saul Goodman",
+  //   "Cássio Ramos",
+  //   "Roger Guedes",
+  // ];
 
   function handleParticipantAdd() {
-    if (participants.includes("Victor Vilela Duarte")) {
-      console.log("aqui");
+    if (participants.includes(participantName)) {
       return Alert.alert(
         "Paricipante repetido",
         "Já existe um participante com esse nome"
       );
     }
+
+    setParticipants((prevState) => [...prevState, participantName]);
+    setParticipantName("");
   }
 
   function handleParticipantRemove(name: string) {
     Alert.alert("Remover", `Deseja remover o participante ${name}?`, [
       {
         text: "Excluir",
-        onPress: () => Alert.alert("Deletado!"),
+        onPress: () =>
+          setParticipants((prevState) =>
+            prevState.filter((participant) => participant !== name)
+          ),
       },
       {
         text: "Não",
@@ -58,6 +66,8 @@ export default function Home() {
           style={styles.input}
           placeholder="Node do participante"
           placeholderTextColor="#6B6B6B"
+          onChangeText={setParticipantName}
+          value={participantName}
         />
 
         <TouchableOpacity style={styles.button} onPress={handleParticipantAdd}>
